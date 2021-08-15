@@ -20,7 +20,7 @@ public class Consulta1_19Dao {
     
     public ArrayList<Consulta1VO_19> consulta1DAO() throws SQLException 
     {
-        ArrayList<Consulta1VO_19>  response = new ArrayList<Consulta1VO_19>();
+        ArrayList<Consulta1VO_19>  arrayConsulta1Vo = new ArrayList<Consulta1VO_19>();
         Connection connection = JDBCUtilities.getConnection();
         try 
         {
@@ -28,12 +28,14 @@ public class Consulta1_19Dao {
             ResultSet rset = statement.executeQuery();
 
             while (rset.next()) {
+
                 Consulta1VO_19 consulta1vo_19 = new Consulta1VO_19();
-                consulta1vo_19.setId(rset.getInt("ID_Proyecto"));
-                consulta1vo_19.setFecha(rset.getString("Fecha_Inicio"));
+                consulta1vo_19.setIdProyecto(rset.getInt("ID_Proyecto"));
+                consulta1vo_19.setFechaInicio(rset.getString("Fecha_Inicio"));
                 consulta1vo_19.setConstructora(rset.getString("Constructora"));
                 consulta1vo_19.setSerial(rset.getString("Serial"));
-                response.add(consulta1vo_19);
+
+                arrayConsulta1Vo.add(consulta1vo_19);
             }
             rset.close();
             statement.close();
@@ -41,14 +43,14 @@ public class Consulta1_19Dao {
         }
         catch(SQLException e)
         {
-            System.err.println("Error consultando ranking de bancos según el área promedio de proyectos respaldados: "+e);
+            throw new SQLException("Error consultando ranking de bancos según el área promedio de proyectos respaldados: "+e);
         }
         finally
         {
-            if(connection != null){
+            if(!connection.isClosed()){
                 connection.close();
             }
         }
-        return response;        
+        return arrayConsulta1Vo;        
     }  
 }
